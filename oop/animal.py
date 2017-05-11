@@ -1,3 +1,6 @@
+#! /usr/bin/python
+#	-*- coding: UTF-8 -*-
+
 class Animal(object):
     def run(self):
         print 'Animal is running...'
@@ -24,7 +27,7 @@ if __name__ == '__main__':
     print type(dog)
     print type(cat)
 
-    print 'Dog is isinstance of Animal :',isinstance(dog,Animal)
+    print 'Dog is isinstance of Animal :', isinstance(dog, Animal)
     print 'Animal is isinstance of Dog :', isinstance(animal, Dog)
     print dir(animal)
     print dir(dog)
