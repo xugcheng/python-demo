@@ -13,7 +13,7 @@ Base = declarative_base()
 # 初始化数据库连接
 
 engine = create_engine(
-    'mysql+mysqlconnector://sch_test2:Quan_test_1726@rm-wz99nh36m6k607dl2o.mysql.rds.aliyuncs.com/test_school?charset=utf8')
+    'mysql+mysqlconnector://username:password@localhost:3306/test?charset=utf8')
 
 # 创建dbsession
 
