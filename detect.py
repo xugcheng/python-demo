@@ -123,7 +123,8 @@ def judge(studentId, startTime, endTime):
     elif len(data['studentId'].unique()) > 1:
         raise Exception("存在多个设备的数据")
     else:
-        print('开始判定模式')
+        pass
+        # print('开始判定模式')
 
     # 算法判断
     valid_df, df_count = prepare_df(data)
@@ -172,7 +173,7 @@ def judge(studentId, startTime, endTime):
 
 if __name__ == "__main__":
 
-    studentIds = [84,85, 86]
+    studentIds = [84, 85, 86]
     startTime = '2017-05-02 16:30:44'
     endTime = '2017-05-02 16:40:44'
 
