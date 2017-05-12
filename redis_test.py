@@ -17,8 +17,8 @@ if __name__ == '__main__':
 
     print type(zset)
 
-    for mem in zset:
-        for key in mem:
-            print key, type(key),
-            t = float(str(key).split('-')[0])
-            print time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t))
+    for i in range(0, len(zset)):
+        mem = zset[i];
+        t = time.localtime(float(mem[1]))
+        t = time.strftime('%Y-%m-%d %H:%M:%S', t)
+        print t, mem[0]
