@@ -173,7 +173,7 @@ def judge(studentId, startTime, endTime):
 
 if __name__ == "__main__":
 
-    studentIds = range(1,101)
+    studentIds = range(1, 101)
     startTime = '2017-05-02 16:30:44'
     endTime = '2017-05-02 16:40:44'
 
