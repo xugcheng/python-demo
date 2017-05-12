@@ -7,7 +7,7 @@ __author__ = 'xuguocheng'
 
 import redis
 
-pool = redis.ConnectionPool(host='testschool.icomwell.com', port=6379, db=1, password='Redis1011')
+pool = redis.ConnectionPool(host='localhost', port=6379, db=1, password='password')
 r = redis.Redis(connection_pool=pool);
 
 
