@@ -1,11 +1,11 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 
-import pandas as pd
-import numpy as np
 import os
 from math import ceil
-from my_db.pd_client import queryRssiDiff
+
+import numpy as np
+import pandas as pd
 
 
 def calculate(array):
@@ -113,9 +113,9 @@ def add_feature(valid_df, df_count):
     return feature_df
 
 
-def judge(studentId, startTime, endTime):
+def judge(data):
     # 读取数据
-    data = queryRssiDiff(studentId, startTime, endTime)
+    # data = queryRssiDiff(studentId, startTime, endTime)
 
     # 数据校验
     if len(data['studentId'].unique()) == 0:
@@ -157,31 +157,58 @@ def judge(studentId, startTime, endTime):
                         'event': flag}, index=np.arange(1))
 
     # 结果保存早result.csv
-    # dst_file = 'result1.csv'
-    # if not os.path.exists(dst_file):
-    #     open(dst_file, 'a').close()
-    #     result = pd.read_csv(dst_file, names=['studentId', 'jsTime', 'event'], dtype={'studentId': int})
-    #     result.to_csv(dst_file, index=False, encoding='utf-8')
-    #
-    # result = pd.read_csv(dst_file, dtype={'studentId': int})
-    # result = pd.concat([result, ans], ignore_index=True).reset_index(drop=True)
-    # result.to_csv(dst_file, index=False, encoding='utf-8')
+    dst_file = 'result1.csv'
+    if not os.path.exists(dst_file):
+        open(dst_file, 'a').close()
+        result = pd.read_csv(dst_file, names=['studentId', 'jsTime', 'event'], dtype={'studentId': int})
+        result.to_csv(dst_file, index=False, encoding='utf-8')
+
+    result = pd.read_csv(dst_file, dtype={'studentId': int})
+    result = pd.concat([result, ans], ignore_index=True).reset_index(drop=True)
+    result.to_csv(dst_file, index=False, encoding='utf-8')
     # print('结果已存入result1.csv')
 
     return flag
 
 
 if __name__ == "__main__":
+    pass
+    # client = get_redis_client();
+    # keys = client.keys('io_sch_11_std_*')
+    # print '数量:', len(keys)
+    # for key in keys:
+    #     studentId = int(str(key).split('_')[-1])
+    #     seq_fitst_time = long(client.hget(key, 'seq_first_time'))
+    #     seq_last_time = long(client.hget(key, 'seq_last_time'))
+    #     now = long(time.time())
+    #
+    #     duration = seq_last_time - seq_fitst_time
+    #     # print duration
+    #     if duration > 0:
+    #         try:
+    #             startTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(seq_fitst_time) / 1000))
+    #             endTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(seq_last_time) / 1000))
+    #             flag = judge(studentId, startTime, endTime)
+    #             client.delete(key)
+    #             print '%d,%s' % (studentId, flag)
+    #         except BaseException, e:
+    #             print '%d,%s' % (studentId, e.message)
+    #             pass
+    #         finally:
+    #             pass
+    #     else:
+    #         pass
 
-    studentIds = range(1, 101)
-    startTime = '2017-05-02 16:30:44'
-    endTime = '2017-05-02 16:40:44'
-
-    for studentId in studentIds:
-        try:
-            flag = judge(studentId, startTime, endTime)
-            print '%d,%s' % (studentId, flag)
-        except BaseException, e:
-            print '%d,%s' % (studentId, e.message)
-        finally:
-            pass
+    # studentIds = range(1, 101)
+    # startTime = '2017-05-12 15:11:38'
+    # endTime = '2017-05-12 15:14:49'
+    #
+    # for studentId in studentIds:
+    #     try:
+    #         flag = judge(studentId, startTime, endTime)
+    #         print '%d,%s' % (studentId, flag)
+    #     except BaseException, e:
+    #         # pass
+    #         print '%d,%s' % (studentId, e.message)
+    #     finally:
+    #         pass

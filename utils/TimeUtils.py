@@ -41,12 +41,4 @@ def time2str(t, f):
 
 
 if __name__ == '__main__':
-    getFormatTimeOfNow()
-
-    t = str2time('2017-05-12 01:02:03', '%Y-%m-%d %H:%M:%S')
-
-    s = time2str(t, '%Y-%m-%d %H:%M:%S')
-
-    print 't:', t
-
-    print 's:', s
+    pass

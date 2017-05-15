@@ -2,14 +2,7 @@
 #	-*- coding: UTF-8 -*-
 
 import json
-
-
-class Person(object):
-    def __init__(self, id, name, age):
-        self.id = id
-        self.name = name
-        self.age = age
-
+from oop.person import Person
 
 if __name__ == '__main__':
     obj = dict(id=1, name='张三', age=20)

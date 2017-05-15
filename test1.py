@@ -1,20 +1,20 @@
-#! /usr/bin/python
-#	-*- coding: UTF-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-counter = 100  # 整形变量
-miles = 1000.0  # 浮点型
-name = "python"  # 字符串
+import context
+from entity.entity import sch_user as user
 
-s = '''
-line1
-line2
-line3
-%s
-%s
-''' % (1,2)
+if __name__ == '__main__':
+    myContext = context.Context()
+    dbClient = myContext.get_db_client()
+    pdClient = myContext.get_pd_client()
+    redisClient = myContext.get_redis_client()
+    session = myContext.session
 
-print "counter=", counter
-print "miles=", miles
-print "name=", name
-print name[1:2]
-print s
+    user = session.query(user).filter(user.id == 1).one()
+
+    print 'type:', type(user)
+    print 'name:', user.name
+
+    rssiDiff = pdClient.queryRssiDiff(85, '2017-05-02 16:30:44', '2017-05-02 16:40:44')
+    print rssiDiff
