@@ -114,61 +114,29 @@ def add_feature(valid_df, df_count):
 
 
 def judge(data):
-    # 读取数据
-    # data = queryRssiDiff(studentId, startTime, endTime)
-
-    # 数据校验
-    if len(data['studentId'].unique()) == 0:
-        raise Exception("数据为空")
-    elif len(data['studentId'].unique()) > 1:
-        raise Exception("存在多个设备的数据")
-    else:
-        pass
-        # print('开始判定模式')
-
     # 算法判断
     valid_df, df_count = prepare_df(data)
     featrue = add_feature(valid_df, df_count)
-
-    # print 'valid_df'
-    # print valid_df
-    # print 'df_count'
-    # print df_count
-    # print  'featrue'
-    # print featrue
 
     feature_df = pd.DataFrame()
     feature_df = feature_df.append(featrue)
 
     if feature_df['front_is_positive'].tolist()[0] > 0.5:
         if feature_df['back_is_positive'].tolist()[0] > 0.5:
+            event = 'inSchool'
             flag = '校内'
         else:
+            event = 'out'
             flag = '出校'
     else:
         if feature_df['back_is_positive'].tolist()[0] > 0.5:
+            event = 'in'
             flag = '进校'
         else:
+            event = 'outSchool'
             flag = '校外'
 
-    # 判断结果
-    ans = pd.DataFrame({'studentId': data['studentId'][0],
-                        'jsTime': data['jsTime'].values[-1],
-                        'event': flag}, index=np.arange(1))
-
-    # 结果保存早result.csv
-    dst_file = 'result1.csv'
-    if not os.path.exists(dst_file):
-        open(dst_file, 'a').close()
-        result = pd.read_csv(dst_file, names=['studentId', 'jsTime', 'event'], dtype={'studentId': int})
-        result.to_csv(dst_file, index=False, encoding='utf-8')
-
-    result = pd.read_csv(dst_file, dtype={'studentId': int})
-    result = pd.concat([result, ans], ignore_index=True).reset_index(drop=True)
-    result.to_csv(dst_file, index=False, encoding='utf-8')
-    # print('结果已存入result1.csv')
-
-    return flag
+    return flag, event
 
 
 if __name__ == "__main__":

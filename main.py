@@ -6,6 +6,8 @@ from utils import TimeUtil
 import time
 import detect
 import logging
+from entity.entity import sch_student_event
+import datetime
 
 datetime_format = '%Y-%m-%d %H:%M:%S'
 logger = logging.getLogger(__name__)
@@ -28,11 +30,16 @@ def seq_check_in_out_by_school(school_id):
             if seq_first_time is None or seq_last_time is None:
                 continue
             else:
+                student_id = int(student_id)
+                seq_first_time = long(seq_first_time) / 1000
+                seq_last_time = long(seq_last_time) / 1000
 
-                result, flag = seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time)
+                result, flag, event = seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time)
                 if result:
                     redisClient.delete(key)
                     # 保存结果,推送等操作
+                    jsTime = datetime.datetime.fromtimestamp(seq_last_time);
+                    save_student_event(student_id, jsTime, event)
 
         except Exception, e:
             logger.exception(e)
@@ -41,19 +48,18 @@ def seq_check_in_out_by_school(school_id):
 
 
 def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
-    seq_first_time = long(seq_first_time) / 1000
-    seq_last_time = long(seq_last_time) / 1000
     now = long(time.time())
     duration1 = now - seq_last_time
     duration2 = seq_last_time - seq_first_time
-    student_id = int(student_id)
+
     startTime = TimeUtil.time2str(TimeUtil.sencond2time(seq_first_time), datetime_format)
     endTime = TimeUtil.time2str(TimeUtil.sencond2time(seq_last_time), datetime_format)
 
     # logger.info('duration1:%d,duration2:%d', duration1, duration2)
 
-    flag = ''
     result = False
+    flag = ''
+    event = ''
     if duration1 >= 1 * 60 or duration2 >= 5 * 60:
 
         # print '开始算法判断:', studentId
@@ -67,7 +73,7 @@ def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
             pass
 
         result = True
-        flag = detect.judge(data)
+        flag, event = detect.judge(data)
 
         logger.info('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, startTime, endTime, flag))
 
@@ -75,7 +81,17 @@ def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
 
         logger.info('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, startTime, endTime, '不满足判断条件'))
 
-    return result, flag
+    return result, flag, event
+
+
+def save_student_event(studentId, jsTime, event):
+    new_event = sch_student_event()
+    new_event.student_id = studentId
+    new_event.time = jsTime
+    new_event.event = event
+
+    session.add(new_event)
+    session.commit()
 
 
 if __name__ == '__main__':

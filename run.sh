@@ -1,0 +1,1 @@
+/usr/local/Cellar/python/2.7.12_2/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python /Users/xuguocheng/Desktop/workspace/my-demo/python-demo/test1.py
