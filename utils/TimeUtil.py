@@ -40,5 +40,10 @@ def time2str(t, f):
     return time.strftime(f, t)
 
 
+def sencond2time(t):
+    t = time.localtime(t)
+    return t
+
+
 if __name__ == '__main__':
     pass

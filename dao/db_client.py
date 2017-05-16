@@ -12,7 +12,7 @@ class DbClient(object):
         self.DBSession = sessionmaker(bind=self.engine)
 
     def get_db_session(self):
-        return self.DBSession()
+        return self.DBSession
 
     def get_engine(self):
         return self.engine
