@@ -34,7 +34,7 @@ def seq_check_in_out_by_school(school_id):
                     redisClient.delete(key)
                     # 保存结果,推送等操作
 
-        except StandardError, e:
+        except Exception, e:
             logger.exception(e)
         finally:
             pass
@@ -59,6 +59,13 @@ def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
         # print '开始算法判断:', studentId
         data = pdClient.queryRssiDiff(studentId=student_id, startTime=startTime, endTime=endTime)
 
+        if len(data['studentId'].unique()) == 0:
+            return False, '数据为空'
+        elif len(data['studentId'].unique()) > 1:
+            return False, '存在多个设备的数据'
+        else:
+            pass
+
         result = True
         flag = detect.judge(data)
 
@@ -66,7 +73,7 @@ def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
 
     else:
 
-        logger.info('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, startTime, endTime, '无法判断'))
+        logger.info('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, startTime, endTime, '不满足判断条件'))
 
     return result, flag
 
@@ -86,7 +93,7 @@ if __name__ == '__main__':
         logger.info('进出判断---start---,schoolId:%d' % school_id)
         seq_check_in_out_by_school(school_id=school_id)
         logger.info('进出判断---end-----,schoolId:%d' % school_id)
-    except StandardError, e:
+    except Exception, e:
         logger.exception(e)
     finally:
         pass

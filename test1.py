@@ -31,11 +31,12 @@ if __name__ == '__main__':
     print 'type:', type(user)
     print 'name:', user.name
 
-    rssiDiff = pdClient.queryRssiDiff(85, '2017-05-02 16:30:44', '2017-05-02 16:40:44')
+    rssiDiff = pdClient.queryRssiDiff(1, '2017-05-12 15:11:38', '2017-05-12 15:14:49')
     print rssiDiff
 
     list = session.query(sch_student_event).all()
     for a in list:
         print a
 
-    saveStudentEvent()
+    keys = redisClient.keys('io_*')
+    print '数量:',len(keys)
