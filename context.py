@@ -67,4 +67,4 @@ G_LOGGER = logging.getLogger(__name__)
 
 # dao
 sch_student_rssi_diff_dao = SchStudentRssiDiffDao(G_CONTEXT.get_engine())
-sch_student_event_dao = SchStudentEventDao(G_CONTEXT.create_db_session())
+sch_student_event_dao = SchStudentEventDao(G_CONTEXT.get_engine())

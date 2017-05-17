@@ -4,7 +4,6 @@
 from utils import time_util
 import time
 import detect
-from model.entity import SchStudentEvent
 import datetime
 import context
 
