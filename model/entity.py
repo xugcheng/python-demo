@@ -9,7 +9,7 @@ from sqlalchemy.types import String, INTEGER, DateTime
 Base = declarative_base()
 
 
-class sch_user(Base):
+class SchUser(Base):
     # 表名
     __tablename__ = 'sch_user'
 
@@ -18,7 +18,7 @@ class sch_user(Base):
     name = Column(String(20))
 
 
-class sch_student_event(Base):
+class SchStudentEvent(Base):
     # 表名
     __tablename__ = 'sch_student_event'
 

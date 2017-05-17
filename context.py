@@ -2,30 +2,38 @@
 # -*- coding: utf-8 -*-
 
 import ini_op
-import dao.db_client as dbc
-import dao.pd_client as pdc
-import dao.redis_client as rdc
 import logging
+import redis
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from dao.db_client import *
 
 
 # Context全局变量
-class Context(object):
+class __Context(object):
     def __init__(self):
-        url = ini_op.read_config('./config/db.ini', 'db', 'url')
-        username = ini_op.read_config('./config/db.ini', 'db', 'username')
-        password = ini_op.read_config('./config/db.ini', 'db', 'password')
-        conn_url = 'mysql+mysqlconnector://%s:%s@%s?charset=utf8' % (username, password, url)
+        db_url = ini_op.read_config('./config/db.ini', 'db', 'url')
+        db_username = ini_op.read_config('./config/db.ini', 'db', 'username')
+        db_password = ini_op.read_config('./config/db.ini', 'db', 'password')
+        db_conn_url = 'mysql+mysqlconnector://%s:%s@%s?charset=utf8' % (db_username, db_password, db_url)
 
-        host = ini_op.read_config('./config/redis.ini', 'redis', 'host')
-        port = ini_op.read_config('./config/redis.ini', 'redis', 'port')
-        password = ini_op.read_config('./config/redis.ini', 'redis', 'password')
-        database = ini_op.read_config('./config/redis.ini', 'redis', 'database')
+        redis_host = ini_op.read_config('./config/redis.ini', 'redis', 'host')
+        redis_port = ini_op.read_config('./config/redis.ini', 'redis', 'port')
+        redis_password = ini_op.read_config('./config/redis.ini', 'redis', 'password')
+        redis_database = ini_op.read_config('./config/redis.ini', 'redis', 'database')
 
-        self.dbClient = dbc.DbClient(conn_url=conn_url)
-        self.engine = self.dbClient.get_engine()
-        self.session = self.dbClient.get_db_session()
-        self.pdClient = pdc.PdClient(engine=self.engine)
-        self.rdcClient = rdc.RedisClient(host=host, port=port, db=database, password=password).get_redis_client()
+        # db
+        __engine = create_engine(db_conn_url)
+        __Session = sessionmaker(bind=__engine)
+
+        # redis
+        __redis_pool = redis.ConnectionPool(host=redis_host, port=redis_port, db=redis_database,
+                                            password=redis_password)
+        __redis_client = redis.Redis(connection_pool=__redis_pool)
+
+        self.__engine = __engine
+        self.__Session = __Session
+        self.__redis_client = __redis_client
 
         # 配置日志信息
         logging.basicConfig(level=logging.INFO,
@@ -42,11 +50,21 @@ class Context(object):
         # 将定义好的console日志handler添加到root logger
         logging.getLogger('').addHandler(console)
 
-    def get_db_client(self):
-        return self.dbClient
-
-    def get_pd_client(self):
-        return self.pdClient
-
     def get_redis_client(self):
-        return self.rdcClient
+        return self.__redis_client
+
+    def create_db_session(self):
+        return self.__Session()
+
+    def get_engine(self):
+        return self.__engine
+
+
+# 全局变量
+G_CONTEXT = __Context()
+G_REDIS_CLIENT = G_CONTEXT.get_redis_client()
+G_LOGGER = logging.getLogger(__name__)
+
+# dao
+sch_student_rssi_diff_dao = SchStudentRssiDiffDao(G_CONTEXT.get_engine())
+sch_student_event_dao = SchStudentEventDao(G_CONTEXT.create_db_session())

@@ -3,6 +3,8 @@
 
 import time
 
+DEFAULT_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+
 
 def getFormatTimeOfNow():
     t = time.time()
@@ -32,11 +34,11 @@ def getFormatTimeOfNow():
     return t
 
 
-def str2time(s, f):
+def str2time(s, f=DEFAULT_DATE_FORMAT):
     return time.strptime(s, f)
 
 
-def time2str(t, f):
+def time2str(t, f=DEFAULT_DATE_FORMAT):
     return time.strftime(f, t)
 
 
