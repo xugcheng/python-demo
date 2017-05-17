@@ -1,10 +1,7 @@
 #!/usr/bin/python3
 # -*- coding:utf-8 -*-
 
-import os
 from math import ceil
-
-import numpy as np
 import pandas as pd
 
 
