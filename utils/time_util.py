@@ -29,7 +29,7 @@ def getFormatTimeOfNow():
 
     t = long(t)
 
-    print '4:', t, type(t)
+    print '5:', t, type(t)
 
     return t
 
