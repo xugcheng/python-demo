@@ -7,6 +7,7 @@ import redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dao.db_client import *
+from logging.config import fileConfig
 
 
 # Context全局变量
@@ -36,19 +37,7 @@ class __Context(object):
         self.__redis_client = __redis_client
 
         # 配置日志信息
-        logging.basicConfig(level=logging.INFO,
-                            format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)-6s %(message)s',
-                            datefmt='%Y-%m-%d %H:%M:%S',
-                            filename='detect.log',
-                            filemode='a')
-        # 定义一个Handler打印INFO及以上级别的日志到sys.stderr
-        formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)-6s %(message)s')
-        console = logging.StreamHandler()
-        console.setLevel(logging.DEBUG)
-        # 设置日志打印格式
-        console.setFormatter(formatter)
-        # 将定义好的console日志handler添加到root logger
-        logging.getLogger('').addHandler(console)
+        fileConfig('./config/log.ini')
 
     def get_redis_client(self):
         return self.__redis_client

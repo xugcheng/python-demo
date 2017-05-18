@@ -6,11 +6,14 @@ import time
 import detect_0517 as detect
 import datetime
 import context
+from dao.db_client import *
 
 logger = context.G_LOGGER
+# redis
 redis_client = context.G_REDIS_CLIENT
-sch_student_event_dao = context.sch_student_event_dao
-sch_student_rssi_diff_dao = context.sch_student_rssi_diff_dao
+# dao
+sch_student_rssi_diff_dao = SchStudentRssiDiffDao(context.G_CONTEXT.get_engine())
+sch_student_event_dao = SchStudentEventDao(context.G_CONTEXT.get_engine())
 
 
 def seq_check_in_out_by_school(school_id):
