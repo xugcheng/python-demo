@@ -13,15 +13,15 @@ from logging.config import fileConfig
 # Context全局变量
 class __Context(object):
     def __init__(self):
-        db_url = ini_op.read_config('./config/db.ini', 'db', 'url')
-        db_username = ini_op.read_config('./config/db.ini', 'db', 'username')
-        db_password = ini_op.read_config('./config/db.ini', 'db', 'password')
+        db_url = ini_op.read_config('./config/db_config.ini', 'mysql', 'url')
+        db_username = ini_op.read_config('./config/db_config.ini', 'mysql', 'username')
+        db_password = ini_op.read_config('./config/db_config.ini', 'mysql', 'password')
         db_conn_url = 'mysql+mysqlconnector://%s:%s@%s?charset=utf8' % (db_username, db_password, db_url)
 
-        redis_host = ini_op.read_config('./config/redis.ini', 'redis', 'host')
-        redis_port = ini_op.read_config('./config/redis.ini', 'redis', 'port')
-        redis_password = ini_op.read_config('./config/redis.ini', 'redis', 'password')
-        redis_database = ini_op.read_config('./config/redis.ini', 'redis', 'database')
+        redis_host = ini_op.read_config('./config/redis_config.ini', 'redis', 'host')
+        redis_port = ini_op.read_config('./config/redis_config.ini', 'redis', 'port')
+        redis_password = ini_op.read_config('./config/redis_config.ini', 'redis', 'password')
+        redis_database = ini_op.read_config('./config/redis_config.ini', 'redis', 'database')
 
         # db
         __engine = create_engine(db_conn_url)
@@ -37,7 +37,7 @@ class __Context(object):
         self.__redis_client = __redis_client
 
         # 配置日志信息
-        fileConfig('./config/log.ini')
+        fileConfig('./config/logger_config.ini')
 
     def get_redis_client(self):
         return self.__redis_client
