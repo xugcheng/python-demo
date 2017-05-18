@@ -83,7 +83,7 @@ def seq_check_in_out_by_student(student_id, seq_first_time, seq_last_time):
 
     else:
 
-        logger.info('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, start_time, end_time, '不满足判断条件'))
+        logger.debug('studentId:%4d,startTime:%s,endTime:%s,flag:%s' % (student_id, start_time, end_time, '不满足判断条件'))
 
     return result, flag, event
 
