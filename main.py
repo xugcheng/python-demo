@@ -28,9 +28,9 @@ def loop_check_in_out(school_id):
     while True:
 
         try:
-            logger.info('**进出判断--start--,schoolId:%d' % school_id)
+            logger.info('--进出判断--start--,schoolId:%d' % school_id)
             detect_service.seq_check_in_out_by_school(school_id=school_id)
-            logger.info('**进出判断--end----,schoolId:%d' % school_id)
+            logger.info('--进出判断--end----,schoolId:%d' % school_id)
             time.sleep(1)
         except Exception, e:
             logger.exception(e)
