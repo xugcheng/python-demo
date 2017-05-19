@@ -8,20 +8,26 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from dao.db_client import *
 from logging.config import fileConfig
+import os
+
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+DB_CONFIG_PATH = os.path.join(BASE_PATH, 'config/db_config.ini')
+REDIS_CONFIG_PATH = os.path.join(BASE_PATH, 'config/redis_config.ini')
+LOGGER_CONFIG_PATH = os.path.join(BASE_PATH, 'config/logger_config.ini')
 
 
 # Context全局变量
 class __Context(object):
     def __init__(self):
-        db_url = ini_op.read_config('./config/db_config.ini', 'mysql', 'url')
-        db_username = ini_op.read_config('./config/db_config.ini', 'mysql', 'username')
-        db_password = ini_op.read_config('./config/db_config.ini', 'mysql', 'password')
+        db_url = ini_op.read_config(DB_CONFIG_PATH, 'mysql', 'url')
+        db_username = ini_op.read_config(DB_CONFIG_PATH, 'mysql', 'username')
+        db_password = ini_op.read_config(DB_CONFIG_PATH, 'mysql', 'password')
         db_conn_url = 'mysql+mysqlconnector://%s:%s@%s?charset=utf8' % (db_username, db_password, db_url)
 
-        redis_host = ini_op.read_config('./config/redis_config.ini', 'redis', 'host')
-        redis_port = ini_op.read_config('./config/redis_config.ini', 'redis', 'port')
-        redis_password = ini_op.read_config('./config/redis_config.ini', 'redis', 'password')
-        redis_database = ini_op.read_config('./config/redis_config.ini', 'redis', 'database')
+        redis_host = ini_op.read_config(REDIS_CONFIG_PATH, 'redis', 'host')
+        redis_port = ini_op.read_config(REDIS_CONFIG_PATH, 'redis', 'port')
+        redis_password = ini_op.read_config(REDIS_CONFIG_PATH, 'redis', 'password')
+        redis_database = ini_op.read_config(REDIS_CONFIG_PATH, 'redis', 'database')
 
         # db
         __engine = create_engine(db_conn_url)
@@ -37,7 +43,7 @@ class __Context(object):
         self.__redis_client = __redis_client
 
         # 配置日志信息
-        fileConfig('./config/logger_config.ini')
+        fileConfig(LOGGER_CONFIG_PATH)
 
     def get_redis_client(self):
         return self.__redis_client
