@@ -30,7 +30,7 @@ def loop_check_in_out(school_id):
         try:
             detect_service.seq_check_in_out_by_school(school_id=school_id)
             time.sleep(1)
-        except Exception, e:
+        except Exception as e:
             logger.exception(e)
         finally:
             pass
